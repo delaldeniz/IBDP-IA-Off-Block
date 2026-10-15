@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✈️ Off Block - History</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-plane"></i>
+                    <span>Off Block</span>
+                </div>
+                <nav class="nav-menu">
+                    <a href="index.html">Home</a>
+                    <a href="statistics.html">Statistics</a>
+                    <a href="history.html" class="active">History</a>
+                    <a href="about.html">About</a>
+                    <a href="#" id="darkModeToggle" onclick="toggleDarkMode(); return false;" title="Toggle Theme" style="border-bottom: none; display: flex; align-items: center; gap: 5px;">
+                        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="history-section">
+        <div class="container">
+            <h1><i class="fas fa-clock-rotate-left"></i> Check History</h1>
+
+            <div class="privacy panel">
+                <h3><i class="fas fa-shield-halved"></i> Your privacy</h3>
+                <ul>
+                    <li>Your checks are saved in this browser only — nothing is sent to a server.</li>
+                    <li>The data stays on your device and is never shared with anyone.</li>
+                    <li>Only you can see it, and only in this browser.</li>
+                    <li>The newest 50 checks are kept. Each new check replaces the oldest.</li>
+                    <li>You can delete one entry or clear everything at any time.</li>
+                </ul>
+            </div>
+
+            <div class="history-controls">
+                <button class="btn-clear" id="clearAllBtn" onclick="clearAllHistory()"><i class="fas fa-trash"></i> Clear all</button>
+            </div>
+
+            <div id="historyList"></div>
+
+            <p class="note" id="historyCounter"></p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-plane"></i> Off Block</h4>
+                    <p>Predicted flights delays is created for IBDP CS IA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="statistics.html">Statistics</a>
+                    <a href="history.html">History</a>
+                    <a href="about.html">About</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="https://mail.google.com/mail/?view=cm&to=delaldeniz2136@gmail.com&su=Off%20Block%20feedback" target="_blank"><i class="fas fa-envelope"></i> delaldeniz2136@gmail.com</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Social Media</h4>
+                    <div class="social-links">
+                        <a href="https://github.com/delaldeniz" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    var STORAGE_KEY = 'delaywatch_history';
+    var MAX_ITEMS = 50;
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+    function loadHistory() {
+        try {
+            var data = localStorage.getItem(STORAGE_KEY);
+            if (!data) return [];
+            var parsed = JSON.parse(data);
+            if (!Array.isArray(parsed)) return [];
+            return parsed;
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveHistory(items) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        } catch (e) {
+        }
+    }
+
+    function isDeparted(dateStr, timeStr) {
+        try {
+            var parts = dateStr.split('-');
+            var timeParts = timeStr.split(':');
+            var dep = new Date(
+                parseInt(parts[0]),
+                parseInt(parts[1]) - 1,
+                parseInt(parts[2]),
+                parseInt(timeParts[0]),
+                parseInt(timeParts[1])
+            );
+            return dep < new Date();
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function deleteOne(id) {
+        var items = loadHistory();
+        items = items.filter(function(item) {
+            return item.id !== id;
+        });
+        saveHistory(items);
+        renderHistory();
+    }
+
+    function clearAllHistory() {
+        if (!confirm('Delete all saved checks? This cannot be undone.')) return;
+        try {
+            localStorage.removeItem(STORAGE_KEY);
+        } catch (e) {
+        }
+        renderHistory();
+    }
+
+    function renderHistory() {
+        var list = document.getElementById('historyList');
+        var counter = document.getElementById('historyCounter');
+        var clearBtn = document.getElementById('clearAllBtn');
+        var items = loadHistory();
+
+        if (items.length === 0) {
+            list.innerHTML = '<div class="empty"><i class="fas fa-inbox"></i><p>No checks yet.</p><p>Go to <a href="index.html">Home</a> and check a flight — it will appear here.</p></div>';
+            counter.textContent = 'Storing 0 of ' + MAX_ITEMS;
+            clearBtn.style.display = 'none';
+            return;
+        }
+
+        clearBtn.style.display = '';
+        var html = '';
+        for (var i = items.length - 1; i >= 0; i--) {
+            var item = items[i];
+            var percent = Math.round((item.probability || 0) * 100);
+            var departed = isDeparted(item.flight_date || '', item.time || '');
+            var scoreClass = 'score';
+            if (percent < 10) scoreClass += ' low';
+            else if (percent < 25) scoreClass += ' medium';
+            else if (percent < 45) scoreClass += ' raised';
+            else scoreClass += ' high';
+
+            html += '<div class="item' + (departed ? ' departed' : '') + '">';
+            html += '<div class="item-main">';
+            html += '<div class="item-route">';
+            html += '<strong>IST → ' + escapeHtml(item.destination_airport_iata || '') + '</strong>';
+            html += '<span class="item-airline">' + escapeHtml(item.airline_iata || '') + ' · ' + escapeHtml(item.aircraft_model || '') + '</span>';
+            html += '</div>';
+            html += '<div class="item-details">';
+            html += '<span><i class="fas fa-calendar"></i> ' + escapeHtml(item.flight_date || '') + '</span>';
+            html += '<span><i class="fas fa-clock"></i> ' + escapeHtml(item.time || '') + '</span>';
+            if (departed) {
+                html += '<span class="flag">Departed</span>';
+            }
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="item-right">';
+            html += '<span class="' + scoreClass + '">' + percent + '%</span>';
+            html += '<button class="del" onclick="deleteOne(\'' + escapeHtml(item.id || '') + '\')" title="Delete this entry">×</button>';
+            html += '</div>';
+            html += '</div>';
+        }
+
+        list.innerHTML = html;
+        counter.textContent = 'Storing ' + items.length + ' of ' + MAX_ITEMS;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderHistory();
+    });
+    </script>
+</body>
+</html>

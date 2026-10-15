@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✈️ Off Block</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="welcomeScreen" onclick="closeWelcomeScreen()">
+        <div class="welcome-content">
+            <h1>Welcome</h1>
+            <p>Please tap to check the delay probability of your flight</p>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-plane"></i>
+                    <span>Off Block</span>
+                </div>
+                <nav class="nav-menu">
+                    <a href="#home" class="active">Home</a>
+                    <a href="statistics.html">Statistics</a>
+                    <a href="history.html">History</a>
+                    <a href="about.html">About</a>
+                    <a href="#" id="darkModeToggle" onclick="toggleDarkMode(); return false;" title="Toggle Theme" style="border-bottom: none; display: flex; align-items: center; gap: 5px;">
+                        <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Check Your Flight's <br><span class="highlight">Delay Probability</span></h1>
+                    <p>Enter an upcoming flight departing from Istanbul Airport (IST) to estimate its probability of a delay.</p>
+                    <div class="predict-form" id="predictForm">
+                        <div class="predict-row">
+                            <div class="predict-field">
+                                <label for="airlineSelect"><i class="fas fa-plane-departure"></i> Airline</label>
+                                <select id="airlineSelect">
+                                    <option value="TK">Turkish Airlines</option>
+                                    <option value="AT">Royal Air Maroc</option>
+                                    <option value="MS">EgyptAir</option>
+                                    <option value="SU">Aeroflot</option>
+                                    <option value="J2">Azerbaijan Airlines</option>
+                                    <option value="GF">Gulf Air</option>
+                                    <option value="RJ">Royal Jordanian</option>
+                                    <option value="HY">Uzbekistan Airways</option>
+                                    <option value="6E">IndiGo</option>
+                                    <option value="3U">Sichuan Airlines</option>
+                                    <option value="AH">Air Algerie</option>
+                                    <option value="B6">JetBlue</option>
+                                    <option value="FI">Icelandair</option>
+                                    <option value="LO">LOT Polish Airlines</option>
+                                    <option value="MH">Malaysia Airlines</option>
+                                    <option value="NH">ANA</option>
+                                    <option value="OM">MIAT Mongolian</option>
+                                    <option value="OZ">Asiana Airlines</option>
+                                    <option value="PK">Pakistan International</option>
+                                    <option value="SQ">Singapore Airlines</option>
+                                    <option value="TG">Thai Airways</option>
+                                    <option value="TP">TAP Air Portugal</option>
+                                    <option value="UA">United Airlines</option>
+                                    <option value="WB">RwandAir</option>
+                                    <option value="OTHER">Another airline</option>
+                                </select>
+                            </div>
+                            <div class="predict-field">
+                                <label for="destinationSelect"><i class="fas fa-map-marker-alt"></i> Destination</label>
+                                <select id="destinationSelect">
+                                    <option value="LHR">LHR London Heathrow</option>
+                                    <option value="CDG">CDG Paris Charles de Gaulle</option>
+                                    <option value="AMS">AMS Amsterdam</option>
+                                    <option value="FRA">FRA Frankfurt</option>
+                                    <option value="MUC">MUC Munich</option>
+                                    <option value="BER">BER Berlin</option>
+                                    <option value="VIE">VIE Vienna</option>
+                                    <option value="ZRH">ZRH Zurich</option>
+                                    <option value="GVA">GVA Geneva</option>
+                                    <option value="BRU">BRU Brussels</option>
+                                    <option value="CPH">CPH Copenhagen</option>
+                                    <option value="MAD">MAD Madrid</option>
+                                    <option value="BCN">BCN Barcelona</option>
+                                    <option value="LIS">LIS Lisbon</option>
+                                    <option value="FCO">FCO Rome Fiumicino</option>
+                                    <option value="MXP">MXP Milan Malpensa</option>
+                                    <option value="VCE">VCE Venice</option>
+                                    <option value="ATH">ATH Athens</option>
+                                    <option value="BUD">BUD Budapest</option>
+                                    <option value="PRG">PRG Prague</option>
+                                    <option value="OTP">OTP Bucharest</option>
+                                    <option value="BEG">BEG Belgrade</option>
+                                    <option value="LGW">LGW London Gatwick</option>
+                                    <option value="MAN">MAN Manchester</option>
+                                    <option value="JFK">JFK New York JFK</option>
+                                    <option value="DXB">DXB Dubai</option>
+                                    <option value="DOH">DOH Doha</option>
+                                    <option value="AMM">AMM Amman</option>
+                                    <option value="CAI">CAI Cairo</option>
+                                    <option value="GYD">GYD Baku</option>
+                                    <option value="TAS">TAS Tashkent</option>
+                                    <option value="COV">COV Coventry</option>
+                                    <option value="ADB">ADB Izmir</option>
+                                    <option value="AYT">AYT Antalya</option>
+                                    <option value="ESB">ESB Ankara</option>
+                                    <option value="ASR">ASR Kayseri</option>
+                                    <option value="BJV">BJV Bodrum</option>
+                                    <option value="DLM">DLM Dalaman</option>
+                                    <option value="GZT">GZT Gaziantep</option>
+                                    <option value="TZX">TZX Trabzon</option>
+                                    <option value="OTHER">OTHER Somewhere else</option>
+                                </select>
+                            </div>
+                            <div class="predict-field">
+                                <label for="aircraftSelect"><i class="fas fa-jet-fighter"></i> Aircraft</label>
+                                <select id="aircraftSelect">
+                                    <option value="Airbus A319">Airbus A319</option>
+                                    <option value="Airbus A320">Airbus A320</option>
+                                    <option value="Airbus A320 NEO">Airbus A320 NEO</option>
+                                    <option value="Airbus A321" selected>Airbus A321</option>
+                                    <option value="Airbus A321 NEO">Airbus A321 NEO</option>
+                                    <option value="Airbus A330">Airbus A330</option>
+                                    <option value="Airbus A330-200">Airbus A330-200</option>
+                                    <option value="Airbus A330-300">Airbus A330-300</option>
+                                    <option value="Airbus A350-900">Airbus A350-900</option>
+                                    <option value="Boeing 737">Boeing 737</option>
+                                    <option value="Boeing 737-800">Boeing 737-800</option>
+                                    <option value="Boeing 737-900">Boeing 737-900</option>
+                                    <option value="Boeing 777-300ER">Boeing 777-300ER</option>
+                                    <option value="Boeing 787-9">Boeing 787-9</option>
+                                    <option value="OTHER">OTHER</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="predict-row">
+                            <div class="predict-field">
+                                <label for="dateInput"><i class="fas fa-calendar"></i> Departure Date</label>
+                                <input type="date" id="dateInput">
+                                <span class="field-error" id="dateError"></span>
+                            </div>
+                            <div class="predict-field">
+                                <label for="timeInput"><i class="fas fa-clock"></i> Departure Time</label>
+                                <input type="time" id="timeInput">
+                                <span class="field-error" id="timeError"></span>
+                            </div>
+                            <div class="predict-field">
+                                <label for="weatherSelect"><i class="fas fa-cloud-sun-rain"></i> Weather</label>
+                                <select id="weatherSelect">
+                                    <option value="auto">Auto (forecast)</option>
+                                    <option value="clear">Clear sky</option>
+                                    <option value="cloudy">Cloudy</option>
+                                    <option value="rain">Rain</option>
+                                    <option value="fog">Fog</option>
+                                    <option value="wind">Strong wind</option>
+                                    <option value="snow">Snow</option>
+                                    <option value="storm">Thunderstorm</option>
+                                </select>
+                            </div>
+                            <div class="predict-field predict-btn-wrap">
+                                <button id="predictBtn" onclick="handlePredict()"><i class="fas fa-search"></i> Predict Delay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="visual">
+                        <h3><i class="fas fa-chart-column"></i> Delay % by departure hour</h3>
+                        <div class="chart" id="hourChart" role="img" aria-label="Bar chart showing delay percentage for each hour of the day"></div>
+                        <div class="hours" id="hourLabels"></div>
+                        <div class="readout" id="readout"></div>
+                        <p class="foot">Historical pattern from 512,381 IST departures — not a prediction for your flight.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plane"></i> Prediction Result</h2>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <div class="detail-grid">
+                    <div class="detail-card">
+                        <h4>Flight Information</h4>
+                        <p><strong>Airline:</strong> <span id="detailAirline"></span></p>
+                        <p><strong>Route:</strong> IST → <span id="detailDestination"></span></p>
+                        <p><strong>Aircraft:</strong> <span id="detailAircraft"></span></p>
+                        <p><strong>Date:</strong> <span id="detailDate"></span></p>
+                        <p><strong>Time:</strong> <span id="detailTime"></span></p>
+                        <p><strong>Weather:</strong> <span id="detailWeather"></span></p>
+                    </div>
+                    <div class="detail-card">
+                        <h4>AI Prediction Result</h4>
+                        <div class="risk-circle" id="riskCircle">
+                            <svg width="120" height="120">
+                                <circle cx="60" cy="60" r="50" stroke="#e0e0e0" stroke-width="8" fill="none"/>
+                                <circle cx="60" cy="60" r="50" stroke="#5b9bd5" stroke-width="8" fill="none"
+                                    stroke-dasharray="314.159" stroke-dashoffset="314.159" id="riskArc"/>
+                                <text x="60" y="55" text-anchor="middle" font-size="20" font-weight="bold" fill="#333" id="riskPercent">0%</text>
+                                <text x="60" y="75" text-anchor="middle" font-size="10" fill="#666">Risk</text>
+                            </svg>
+                        </div>
+                        <div class="risk-details">
+                            <span class="status-badge" id="riskLabel"></span>
+                            <p id="avgComparison"></p>
+                        </div>
+                    </div>
+                    <div class="detail-card full-width">
+                        <h4>Why this result?</h4>
+                        <ul class="factor-list" id="factorList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4><i class="fas fa-plane"></i> Off Block</h4>
+                    <p>Predicted flights delays is created for IBDP CS IA</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="statistics.html">Statistics</a>
+                    <a href="history.html">History</a>
+                    <a href="about.html">About</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="https://mail.google.com/mail/?view=cm&to=delaldeniz2136@gmail.com&su=Off%20Block%20feedback" target="_blank"><i class="fas fa-envelope"></i> delaldeniz2136@gmail.com</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Social Media</h4>
+                    <div class="social-links">
+                        <a href="https://github.com/delaldeniz" target="_blank"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    var BY_HOUR = HOUR_RATES;
+    var THIN = [3,4,5,23];
+    var AVERAGE = 13.8;
+    var MAX = Math.max.apply(null, BY_HOUR);
+
+    function buildChart() {
+        var chart = document.getElementById('hourChart');
+        var labels = document.getElementById('hourLabels');
+        if (!chart || !labels) return;
+        chart.innerHTML = '';
+        labels.innerHTML = '';
+        var avgPos = (AVERAGE / MAX) * 100;
+        chart.innerHTML += '<div class="avgline" style="bottom:' + avgPos + '%"></div>';
+        chart.innerHTML += '<span class="avgtag" style="bottom:' + avgPos + '%">' + AVERAGE + '%</span>';
+        for (var i = 0; i < 24; i++) {
+            var pct = BY_HOUR[i];
+            var h = (pct / MAX) * 100;
+            var col = document.createElement('div');
+            col.className = 'col';
+            col.innerHTML = '<div class="bar" data-hour="' + i + '" style="height:' + h + '%" title="' + String(i).padStart(2, '0') + ':00 — ' + pct + '% delayed"></div>';
+            chart.appendChild(col);
+            var lbl = document.createElement('div');
+            lbl.textContent = String(i).padStart(2, '0');
+            lbl.style.fontSize = '10px';
+            lbl.style.textAlign = 'center';
+            labels.appendChild(lbl);
+        }
+    }
+
+    function getBestHour() {
+        var bestIdx = 0;
+        var bestVal = 100;
+        for (var i = 0; i < 24; i++) {
+            if (THIN.indexOf(i) !== -1) continue;
+            if (BY_HOUR[i] < bestVal) {
+                bestVal = BY_HOUR[i];
+                bestIdx = i;
+            }
+        }
+        return bestIdx;
+    }
+
+    function updateChart() {
+        var timeField = document.getElementById('timeInput');
+        if (!timeField) return;
+        var val = timeField.value || '18:30';
+        var hour = parseInt(val.split(':')[0], 10);
+        var pct = BY_HOUR[hour];
+        var best = getBestHour();
+        var bars = document.querySelectorAll('#hourChart .bar');
+        for (var i = 0; i < bars.length; i++) {
+            var bh = parseInt(bars[i].getAttribute('data-hour'), 10);
+            if (bh === hour) {
+                bars[i].className = 'bar active';
+            } else if (bh === best) {
+                bars[i].className = 'bar best';
+            } else {
+                bars[i].className = 'bar';
+            }
+        }
+        var readout = document.getElementById('readout');
+        if (!readout) return;
+        var isBest = (hour === best) && (THIN.indexOf(hour) === -1);
+        if (isBest) {
+            readout.innerHTML = '<strong>' + String(hour).padStart(2, '0') + ':00</strong> — ' + pct + '% delayed. This is the best hour of the day.';
+        } else {
+            readout.innerHTML = '<strong>' + String(hour).padStart(2, '0') + ':00</strong> — ' + pct + '% delayed. Best hour is <strong>' + String(best).padStart(2, '0') + ':00</strong> (' + BY_HOUR[best] + '%).';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        buildChart();
+        updateChart();
+        var tf = document.getElementById('timeInput');
+        if (tf) {
+            tf.addEventListener('input', updateChart);
+        }
+    });
+    </script>
+</body>
+</html>
