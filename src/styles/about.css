@@ -1,0 +1,51 @@
+.about-page {
+  padding: 190px 0 var(--s16);
+}
+
+.about-title {
+  margin-top: var(--s3);
+  font-size: clamp(48px, 8.6vw, 150px);
+}
+
+.about-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s12);
+  margin-top: var(--s12);
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+}
+
+.about-columns p {
+  max-width: 46ch;
+  margin-top: var(--s2);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.about-second {
+  margin-top: var(--s6);
+}
+
+.about-contact a {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent-text);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+
+
+
+@media (max-width: 860px) {
+  .about-columns {
+    grid-template-columns: 1fr;
+    gap: var(--s6);
+  }
+}
+
+.about-thanks {
+  margin-top: var(--s16);
+  font-size: clamp(44px, 7vw, 120px);
+}

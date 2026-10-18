@@ -1,0 +1,263 @@
+.history-page {
+  padding: 190px 0 var(--s16);
+  min-height: 80vh;
+}
+
+.history-title {
+  margin-top: var(--s3);
+  font-size: clamp(56px, 10vw, 168px);
+}
+
+.history-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--s12);
+  margin-top: var(--s8);
+  align-items: start;
+}
+
+.privacy {
+  padding-top: var(--s2);
+  border-top: 1px solid var(--fg);
+}
+
+.privacy ul {
+  margin-top: var(--s2);
+}
+
+.privacy li {
+  position: relative;
+  padding: 10px 0 10px 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.privacy li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent-text);
+}
+
+.history-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 24px;
+  padding-bottom: var(--s2);
+  margin-bottom: var(--s3);
+  border-bottom: 1px solid var(--line);
+}
+
+.history-confirm {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: 14px;
+}
+
+.history-empty {
+  padding: var(--s8) 0;
+}
+
+.history-empty .display {
+  font-size: clamp(36px, 5vw, 64px);
+}
+
+.history-empty p:last-child {
+  margin-top: var(--s2);
+  color: var(--muted);
+}
+
+.stub-stack {
+  display: grid;
+  gap: var(--s2);
+}
+
+.stub {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 170px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--line), 0 14px 24px -18px rgba(11, 18, 32, 0.45);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  animation: stubIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stub:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1px 0 var(--line), 0 26px 34px -20px rgba(11, 18, 32, 0.55);
+}
+
+@keyframes stubIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stub::before,
+.stub::after {
+  content: "";
+  position: absolute;
+  right: 158px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.stub::before {
+  top: -9px;
+  clip-path: inset(50% 0 0 0);
+}
+
+.stub::after {
+  bottom: -9px;
+  clip-path: inset(0 0 50% 0);
+}
+
+.stub-main {
+  padding: var(--s3);
+}
+
+.stub-route {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+}
+
+.stub-arrow {
+  color: var(--accent-text);
+}
+
+.stub-line {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stub-flag {
+  margin-left: var(--s2);
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 10px;
+}
+
+.stub-side {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--s3);
+  border-left: 2px dashed var(--line);
+}
+
+.stub-score {
+  font-family: var(--font-mono);
+  font-size: 38px;
+  line-height: 1;
+}
+
+.stub-tone {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.stub-score.tone-low {
+  color: #3F76A3;
+}
+
+.stub-score.tone-typical {
+  color: #6B6F7A;
+}
+
+.stub-score.tone-raised {
+  color: #B8613A;
+}
+
+.stub-score.tone-high {
+  color: var(--red);
+}
+
+body.dark-mode .stub-score.tone-low {
+  color: var(--sky);
+}
+
+body.dark-mode .stub-score.tone-typical {
+  color: var(--risk-typical);
+}
+
+.stub-delete {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.stub-delete:hover {
+  color: var(--fg);
+  background: var(--line);
+}
+
+.stub.is-departed .stub-main {
+  opacity: 0.6;
+}
+
+@media (max-width: 860px) {
+  .history-layout {
+    grid-template-columns: 1fr;
+    gap: var(--s8);
+  }
+}
+
+@media (max-width: 520px) {
+  .stub {
+    grid-template-columns: 1fr 130px;
+  }
+
+  .stub::before,
+  .stub::after {
+    right: 118px;
+  }
+
+  .stub-route {
+    font-size: 24px;
+  }
+}
+
+.privacy-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.history-count {
+  font-size: 14px;
+  color: var(--muted);
+}

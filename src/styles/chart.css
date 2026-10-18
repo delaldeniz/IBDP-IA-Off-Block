@@ -1,0 +1,171 @@
+.runway-section {
+  padding: var(--s12) 0 var(--s16);
+}
+
+.runway-title {
+  margin-top: var(--s2);
+  font-size: clamp(44px, 6.4vw, 104px);
+}
+
+.runway-intro {
+  max-width: 52ch;
+  margin-top: var(--s3);
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.runway-plot {
+  position: relative;
+  margin-top: var(--s8);
+  height: 300px;
+  padding-top: 40px;
+  margin-bottom: var(--s12);
+}
+
+.runway-cols {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  height: 100%;
+  border-bottom: 1px solid var(--line);
+}
+
+.runway-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  outline-offset: -2px;
+}
+
+.runway-bar {
+  position: relative;
+  width: clamp(4px, 0.7vw, 9px);
+  border-radius: 999px 999px 0 0;
+  background: var(--fg);
+  opacity: 0.3;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.runway-col:hover .runway-bar,
+.runway-col:focus-visible .runway-bar {
+  opacity: 0.75;
+}
+
+.runway-bar.is-thin {
+  opacity: 0.14;
+}
+
+.runway-bar.is-best {
+  background: var(--sky);
+  opacity: 1;
+}
+
+.runway-bar.is-selected {
+  background: var(--accent);
+  opacity: 1;
+}
+
+.runway-tag {
+  position: absolute;
+  top: calc(100% + 34px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: var(--sky);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.runway-tag.is-you {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.runway-hour {
+  position: absolute;
+  top: calc(100% + 10px);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.runway-avg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  border-top: 1px dashed var(--accent);
+  pointer-events: none;
+}
+
+.runway-avg-tag {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  padding: 0 4px;
+  background: var(--bg);
+  color: var(--accent-text);
+}
+
+.runway-tooltip {
+  position: absolute;
+  top: -8px;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border-radius: var(--r-input);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+body.dark-mode .runway-tooltip {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.runway-tooltip strong {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent-light);
+}
+
+body.dark-mode .runway-tooltip strong {
+  color: var(--accent-strong);
+}
+
+.runway-note {
+  margin-top: var(--s8);
+  max-width: 64ch;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .runway-plot {
+    height: 240px;
+  }
+
+  .runway-hour.is-minor {
+    display: none;
+  }
+}

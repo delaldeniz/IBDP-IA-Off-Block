@@ -1,0 +1,53 @@
+:root {
+  --ink: #0B1220;
+  --paper: #F4EFE6;
+  --night: #070B14;
+  --sky: #5B8DB8;
+  --red: #D9542B;
+  --accent-light: #8EC5F0; /* on always-dark surfaces (board, footer) */
+  --accent-strong: #1F5A92;
+
+  --font-display: "Instrument Serif", "Times New Roman", serif;
+  --font-body: "Geist", "Manrope", system-ui, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 40px;
+  --s6: 48px;
+  --s8: 64px;
+  --s12: 96px;
+  --s16: 128px;
+  --r-input: 6px;
+  --r-panel: 14px;
+  --gutter: clamp(20px, 5vw, 72px);
+
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --muted: rgba(11, 18, 32, 0.6);
+  --line: rgba(11, 18, 32, 0.12);
+  --surface: #FBF8F2;
+  --nav-bg: rgba(244, 239, 230, 0.78);
+  --accent: #2F6FA8;
+  --accent-ink: #FFFFFF;
+  --accent-text: #2E5F8A;
+
+  --risk-low: var(--sky);
+  --risk-typical: #E9DFC9;
+  --risk-raised: #E9896A;
+  --risk-high: var(--red);
+}
+
+body.dark-mode {
+  --bg: var(--night);
+  --fg: var(--paper);
+  --muted: rgba(244, 239, 230, 0.62);
+  --line: rgba(244, 239, 230, 0.14);
+  --surface: #0E1626;
+  --nav-bg: rgba(7, 11, 20, 0.72);
+  --accent: #6AA9F0;
+  --accent-ink: var(--ink);
+  --accent-text: #8EC5F0;
+}

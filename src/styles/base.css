@@ -1,0 +1,189 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  transition: background-color 0.4s, color 0.4s;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* film grain: an SVG noise texture over the whole page at ~4% opacity */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+body.dark-mode .grain {
+  opacity: 0.06;
+}
+
+.display em {
+  font-style: italic;
+  color: var(--accent-text);
+}
+
+.container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.btn-accent {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 28px;
+  border: 0;
+  border-radius: var(--r-input);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 500;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+/* light sweep across the button on hover */
+.btn-accent::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 60%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.btn-accent:hover::after {
+  transform: translateX(230%) skewX(-18deg);
+}
+
+.btn-accent:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.text-button {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.text-button:hover {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+/* "backwards", not "both": a leftover transform on .page would break the pinned hero */
+.page {
+  animation: pageIn 0.4s ease-out backwards;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.reveal-line > span {
+  display: block;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
