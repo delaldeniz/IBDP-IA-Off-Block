@@ -1,5 +1,7 @@
 {
-  "source": "490920 departures from IST, delayed = 15+ minutes late",
+  "source": "IST departures 15+ minutes late counted as delayed",
+  "collected": 512749,
+  "cancelled": 21829,
   "flights": 490920,
   "delayed": 67803,
   "average": 13.8,
@@ -148,5 +150,41 @@
     "storm": 1.44,
     "snow": 1.56
   },
-  "strength": 0.75
+  "strength": 0.75,
+  "evaluation": {
+    "trainFlights": 392291,
+    "testFlights": 98629,
+    "auc": 0.672,
+    "aucHourOnly": 0.596,
+    "flagThreshold": 25,
+    "flaggedShare": 8.1,
+    "precision": 28.1,
+    "recall": 16.6,
+    "calibration": [
+      {
+        "label": "Under 10%",
+        "flights": 34267,
+        "predicted": 6.7,
+        "actual": 6.4
+      },
+      {
+        "label": "10–20%",
+        "flights": 46929,
+        "predicted": 14.4,
+        "actual": 14.8
+      },
+      {
+        "label": "20–30%",
+        "flights": 13890,
+        "predicted": 23.8,
+        "actual": 23.8
+      },
+      {
+        "label": "30% and more",
+        "flights": 3543,
+        "predicted": 36.5,
+        "actual": 31.2
+      }
+    ]
+  }
 }

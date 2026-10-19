@@ -165,7 +165,7 @@
 
 .importance-row {
   display: grid;
-  grid-template-columns: 170px 1fr 60px;
+  grid-template-columns: 170px 1fr 120px;
   gap: var(--s3);
   align-items: center;
   padding: 10px 0;
@@ -299,7 +299,7 @@
   }
 
   .importance-row {
-    grid-template-columns: 110px 1fr 48px;
+    grid-template-columns: 96px 1fr 96px;
     gap: var(--s2);
   }
 }
@@ -317,5 +317,55 @@
 @media (max-width: 860px) {
   .metrics-head {
     display: none;
+  }
+}
+
+.method-steps {
+  max-width: 62ch;
+  margin: var(--s4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.method-steps li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.method-steps .mono {
+  color: var(--accent-text);
+}
+
+.method-formula {
+  max-width: 640px;
+  margin-top: var(--s3);
+  padding: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-input);
+  font-size: 13px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.metrics-table + .metrics-table {
+  margin-top: var(--s6);
+}
+
+/* let grid columns shrink on phones instead of pushing the page wider */
+.stat-grid > *,
+.stat-split > * {
+  min-width: 0;
+}
+
+.importance-value {
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .method-formula {
+    white-space: normal;
   }
 }
