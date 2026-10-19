@@ -101,7 +101,7 @@ body.dark-mode .window {
 .hero-full-image {
   position: absolute;
   inset: 0;
-  background-image: url("/airplane_bg.png");
+  background-image: url("/airplane_bg.jpg");
   background-size: cover;
   background-position: center;
 }
@@ -276,7 +276,7 @@ body.dark-mode .hero-full::after {
     inset: auto;
     z-index: 2;
     padding: var(--s8) var(--gutter);
-    background-image: linear-gradient(rgba(7, 11, 20, 0.6), rgba(7, 11, 20, 0.6)), url("/airplane_bg.png");
+    background-image: linear-gradient(rgba(7, 11, 20, 0.6), rgba(7, 11, 20, 0.6)), url("/airplane_bg.jpg");
     background-size: cover;
     background-position: center;
   }

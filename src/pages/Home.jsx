@@ -16,15 +16,11 @@ function inThreeDays() {
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// starting values for the fields the flight lookup fills in
+const DEFAULTS = { airline: "TK", destination: "LHR", aircraft: "Airbus A321", time: "18:30" };
+
 export default function Home() {
-  const [form, setForm] = useState({
-    flightNumber: "",
-    airline: "TK",
-    destination: "LHR",
-    aircraft: "Airbus A321",
-    date: inThreeDays(),
-    time: "18:30"
-  });
+  const [form, setForm] = useState({ flightNumber: "", date: inThreeDays(), ...DEFAULTS });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState("");
   // automatic lookup: idle | searching | found | error (flight doesn't exist) | unavailable (database unreachable, so manual entry)
@@ -32,6 +28,7 @@ export default function Home() {
   const [notice, setNotice] = useState(null);
   const [output, setOutput] = useState(null);
   const boardRef = useRef(null);
+  const filledByLookup = useRef(false); // true while the ticket shows details from a found flight
 
   async function handlePredict() {
     const number = cleanFlightNumber(form.flightNumber);
@@ -99,11 +96,17 @@ export default function Home() {
     const timer = setTimeout(async () => {
       const check = await verifyFlight(number, form.date);
       if (stale) return;
-      if (!check.ok) return setLookup({ state: check.final ? "error" : "unavailable", text: check.message });
+      if (!check.ok) {
+        // don't leave the previous flight's details on the ticket
+        if (filledByLookup.current) setForm((old) => ({ ...old, ...DEFAULTS }));
+        filledByLookup.current = false;
+        return setLookup({ state: check.final ? "error" : "unavailable", text: check.message });
+      }
 
       const f = check.flight;
       // partial data: only overwrite what the schedule actually gave us
       setForm((old) => ({ ...old, airline: f.airline, destination: f.destination, aircraft: f.aircraft, time: f.time || old.time }));
+      filledByLookup.current = true;
       setLookup({ state: "found", destination: f.destinationCode });
     }, 700);
 
