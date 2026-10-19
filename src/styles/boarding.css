@@ -369,3 +369,46 @@ body.dark-mode .pass {
     grid-template-columns: 1fr;
   }
 }
+
+.lookup-status {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--pass-muted);
+}
+
+.lookup-status.is-found {
+  color: var(--accent);
+}
+
+.lookup-status.is-error {
+  color: #B83A14;
+}
+
+.pass-summary {
+  margin-top: var(--s2);
+  font-size: 14px;
+  color: var(--pass-muted);
+}
+
+.pass-manual {
+  margin-top: var(--s3);
+}
+
+.pass-manual-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s2) var(--s3);
+  margin-top: var(--s2);
+}
+
+.pass-notice.is-warn {
+  border-left-color: #B8861A;
+  background: rgba(184, 134, 26, 0.1);
+  color: #6B4D0A;
+}
+
+@media (max-width: 860px) {
+  .pass-manual-fields {
+    grid-template-columns: 1fr;
+  }
+}

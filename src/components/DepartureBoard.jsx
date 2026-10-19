@@ -4,7 +4,7 @@ import { findDestination } from "../data/destinations.js";
 import { riskTone } from "../data/riskTone.js";
 import "../styles/board.css";
 
-export default function DepartureBoard({ input, result, flightNumber, playKey, boardRef }) {
+export default function DepartureBoard({ input, result, flightNumber, verified = true, playKey, boardRef }) {
   const percent = Math.round(result.probability * 100);
   const tone = riskTone(percent);
   const dest = findDestination(input.destination_airport_iata);
@@ -28,7 +28,7 @@ export default function DepartureBoard({ input, result, flightNumber, playKey, b
         <div className="board">
           <div className="board-top">
             <span className="board-title">Departures</span>
-            <span className="board-title board-title-muted">Schedule verified · IST — Istanbul Airport</span>
+            <span className="board-title board-title-muted">{verified ? "Schedule verified" : "Flight not verified"} · IST — Istanbul Airport</span>
           </div>
 
           <div className="board-table" role="table">

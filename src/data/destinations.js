@@ -31,7 +31,7 @@ const rows = [
   ["CAI", "Cairo", "Cairo International", 30.1219, 31.4056],
   ["GYD", "Baku", "Heydar Aliyev", 40.4675, 50.0467],
   ["TAS", "Tashkent", "Islam Karimov", 41.2579, 69.2811],
-  ["COV", "Coventry", "Coventry Airport", 52.3697, -1.4797],
+  ["COV", "Adana-Mersin", "Cukurova", 36.8905, 35.0614],
   ["ADB", "Izmir", "Adnan Menderes", 38.2924, 27.157],
   ["AYT", "Antalya", "Antalya Airport", 36.8987, 30.8005],
   ["ESB", "Ankara", "Esenboga", 40.1281, 32.9951],

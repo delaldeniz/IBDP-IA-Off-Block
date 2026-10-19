@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getPrediction, airlineNames } from "../data.js";
+import { getPrediction } from "../data.js";
 import { verifyFlight, cleanFlightNumber } from "../data/flightLookup.js";
 import { addToHistory } from "../data/history.js";
 import { ScrollTrigger, scrollTo } from "../effects/motion.js";
@@ -23,11 +23,12 @@ export default function Home() {
     destination: "LHR",
     aircraft: "Airbus A321",
     date: inThreeDays(),
-    time: "18:30",
-    weather: "auto"
+    time: "18:30"
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState("");
+  // automatic lookup: idle | searching | found | error (flight doesn't exist) | unavailable (database unreachable, so manual entry)
+  const [lookup, setLookup] = useState({ state: "idle" });
   const [notice, setNotice] = useState(null);
   const [output, setOutput] = useState(null);
   const boardRef = useRef(null);
@@ -45,45 +46,72 @@ export default function Home() {
 
     setLoading("Checking flight…");
     const check = await verifyFlight(number, form.date);
-    if (!check.ok) {
+
+    // the database says this flight doesn't exist: no result
+    if (!check.ok && check.final) {
       setLoading("");
       return setNotice({ type: "error", text: check.message });
     }
-
-    // the real schedule wins over whatever was typed in
-    const real = check.flight;
-    const fixed = { ...form, flightNumber: real.number, airline: real.airline, destination: real.destination, aircraft: real.aircraft, time: real.time || form.time };
-    setForm(fixed);
-
-    if (new Date(`${fixed.date}T${fixed.time}`) < new Date()) {
+    // the database couldn't be reached: the first time, show the manual fields; the second time, go on unverified
+    if (!check.ok && lookup.state !== "unavailable") {
       setLoading("");
-      return setNotice({ type: "error", text: `Flight ${real.number} has already departed. Choose an upcoming flight.` });
+      return setLookup({ state: "unavailable", text: check.message });
     }
 
-    const changes = [];
-    if (fixed.destination !== form.destination) changes.push(`destination ${form.destination} → ${real.destinationCode}`);
-    if (fixed.airline !== form.airline) changes.push(`airline → ${airlineNames[fixed.airline]}`);
-    if (fixed.time !== form.time) changes.push(`time ${form.time} → ${fixed.time}`);
-    if (fixed.aircraft !== form.aircraft) changes.push(`aircraft → ${fixed.aircraft}`);
-    setNotice({
-      type: "info",
-      text: changes.length ? `Updated to match flight ${real.number}: ${changes.join(", ")}.` : `Flight ${real.number} found in the schedule.`
-    });
+    // the real schedule wins over whatever was typed in
+    const verified = check.ok;
+    let current = form;
+    if (verified) {
+      const real = check.flight;
+      current = { ...form, flightNumber: real.number, airline: real.airline, destination: real.destination, aircraft: real.aircraft, time: real.time || form.time };
+      setForm(current);
+    }
+
+    // flight times are Istanbul times (UTC+3 all year), so compare in Istanbul time, wherever the visitor is
+    if (new Date(`${current.date}T${current.time}:00+03:00`) < new Date()) {
+      setLoading("");
+      return setNotice({ type: "error", text: `Flight ${current.flightNumber} has already departed. Choose an upcoming flight.` });
+    }
 
     const input = {
-      airline_iata: fixed.airline,
-      destination_airport_iata: fixed.destination,
-      aircraft_model: fixed.aircraft,
-      flight_date: fixed.date,
-      time: fixed.time,
-      weather: fixed.weather
+      airline_iata: current.airline,
+      destination_airport_iata: current.destination,
+      aircraft_model: current.aircraft,
+      flight_date: current.date,
+      time: current.time,
+      weather: "auto"
     };
     setLoading("Calculating…");
     const [result] = await Promise.all([getPrediction(input), wait(700)]); // short wait so the loading line is visible
     setLoading("");
     addToHistory(input, result.probability);
-    setOutput({ input, result, flightNumber: real.number, playKey: Date.now() });
+    setOutput({ input, result, verified, flightNumber: number, playKey: Date.now() });
   }
+
+  // when the flight number and date are filled in, wait for a short pause in typing, then look the flight up
+  useEffect(() => {
+    const number = cleanFlightNumber(form.flightNumber);
+    if (!number || !form.date) return setLookup({ state: "idle" });
+
+    let stale = false;
+    setNotice(null); // old messages belong to the previous flight number
+    setLookup({ state: "searching" });
+    const timer = setTimeout(async () => {
+      const check = await verifyFlight(number, form.date);
+      if (stale) return;
+      if (!check.ok) return setLookup({ state: check.final ? "error" : "unavailable", text: check.message });
+
+      const f = check.flight;
+      // partial data: only overwrite what the schedule actually gave us
+      setForm((old) => ({ ...old, airline: f.airline, destination: f.destination, aircraft: f.aircraft, time: f.time || old.time }));
+      setLookup({ state: "found", destination: f.destinationCode });
+    }, 700);
+
+    return () => {
+      stale = true;
+      clearTimeout(timer);
+    };
+  }, [form.flightNumber, form.date]);
 
   useEffect(() => {
     if (!output) return;
@@ -96,7 +124,7 @@ export default function Home() {
   return (
     <>
       <Hero>
-        <BoardingPass form={form} setForm={setForm} errors={errors} notice={notice} loading={loading} onSubmit={handlePredict} />
+        <BoardingPass form={form} setForm={setForm} errors={errors} notice={notice} lookup={lookup} loading={loading} onSubmit={handlePredict} />
       </Hero>
       {output && <DepartureBoard {...output} boardRef={boardRef} />}
       <HourChart time={form.time} />

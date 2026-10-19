@@ -7,7 +7,7 @@ const HOURS = Array.from({ length: 24 }, (_, i) => pad(i));
 const MINUTES = Array.from({ length: 12 }, (_, i) => pad(i * 5));
 
 // two columns (hours, 5-minute steps). Up/Down inside a column, Left/Right to switch column.
-export default function TimePicker({ id, label, value, onChange }) {
+export default function TimePicker({ id, label, value, onChange, disabled }) {
   const { open, up, rootRef, show, hide } = usePopover(300);
   const cols = useRef([]);
   const [hour, minute] = (value || "18:30").split(":");
@@ -66,7 +66,7 @@ export default function TimePicker({ id, label, value, onChange }) {
   return (
     <div className="field" ref={rootRef}>
       <span className="field-label" id={`${id}-label`}>{label}</span>
-      <button type="button" id={id} className="field-trigger" aria-haspopup="dialog" aria-expanded={open} aria-labelledby={`${id}-label ${id}`} onClick={open ? hide : show}>
+      <button type="button" id={id} className="field-trigger" disabled={disabled} aria-haspopup="dialog" aria-expanded={open} aria-labelledby={`${id}-label ${id}`} onClick={open ? hide : show}>
         <span className="field-value mono-value">{value || "--:--"}</span>
         <span className="field-chevron" aria-hidden="true" />
       </button>

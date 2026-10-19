@@ -7,14 +7,16 @@ import TimePicker from "./controls/TimePicker.jsx";
 import RouteMap from "./RouteMap.jsx";
 import Barcode from "./Barcode.jsx";
 import { destinations, findDestination } from "../data/destinations.js";
-import { airlineOptions, aircraftOptions, weatherOptions } from "../data/formOptions.js";
-import { getTodayString } from "../data.js";
+import { airlineOptions, aircraftOptions } from "../data/formOptions.js";
+import { getTodayString, airlineNames } from "../data.js";
 import "../styles/boarding.css";
 
 // "2026-10-17" -> "17 OCT"
 const stubDate = (s) => new Date(s + "T00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "short" }).toUpperCase();
 
-export default function BoardingPass({ form, setForm, errors, notice, loading, onSubmit }) {
+export default function BoardingPass({ form, setForm, errors, notice, lookup, loading, onSubmit }) {
+  const found = lookup.state === "found"; // the real schedule decides destination, airline, aircraft and time
+  const manual = lookup.state === "unavailable"; // database unreachable: the user fills those in by hand
   const button = useRef(null);
   useMagnetic(button);
   const set = (key) => (value) => setForm({ ...form, [key]: value });
@@ -47,7 +49,7 @@ export default function BoardingPass({ form, setForm, errors, notice, loading, o
             <div className="pass-middle">
               <RouteMap destination={findDestination(form.destination)} />
             </div>
-            <Combobox id="destination" label="To" items={destinations} value={form.destination} onChange={set("destination")} />
+            <Combobox id="destination" label="To" items={destinations} value={form.destination} onChange={set("destination")} locked={found} />
           </div>
 
           <div className="pass-fields">
@@ -64,24 +66,39 @@ export default function BoardingPass({ form, setForm, errors, notice, loading, o
                 onChange={(e) => set("flightNumber")(e.target.value.toUpperCase())}
               />
               {errors.flightNumber && <p className="pass-error" role="alert">{errors.flightNumber}</p>}
+              {lookup.state === "searching" && <p className="lookup-status">Finding your flight…</p>}
+              {found && <p className="lookup-status is-found">✓ Flight found{lookup.destination ? ` · to ${lookup.destination}` : ""}</p>}
+              {lookup.state === "error" && <p className="lookup-status is-error">{lookup.text}</p>}
             </div>
-            <Dropdown id="airline" label="Airline" options={airlineOptions} value={form.airline} onChange={set("airline")} />
-            <Dropdown id="aircraft" label="Aircraft" options={aircraftOptions} value={form.aircraft} onChange={set("aircraft")} />
-            <Dropdown id="weather" label="Weather" options={weatherOptions} value={form.weather} onChange={set("weather")} />
             <div>
               <DatePicker id="date" label="Date" value={form.date} min={getTodayString()} onChange={set("date")} />
               {errors.date && <p className="pass-error" role="alert">{errors.date}</p>}
             </div>
-            <div>
-              <TimePicker id="time" label="Time" value={form.time} onChange={set("time")} />
-              {errors.time && <p className="pass-error" role="alert">{errors.time}</p>}
-            </div>
             <div className="pass-action">
               <button ref={button} type="submit" className="btn-accent" disabled={!!loading}>
-                {loading || "Check delay risk →"}
+                {loading || (manual ? "Continue without verification →" : "Check delay risk →")}
               </button>
             </div>
           </div>
+
+          {found && (
+            <p className="pass-summary">
+              {airlineNames[form.airline]} · {form.aircraft} · departs {form.time} (Istanbul time)
+            </p>
+          )}
+
+          {manual && (
+            <div className="pass-manual">
+              <p className="pass-notice is-warn" role="status">
+                {lookup.text} You can fill in the details yourself, but the result will be marked as unverified.
+              </p>
+              <div className="pass-manual-fields">
+                <Dropdown id="airline" label="Airline" options={airlineOptions} value={form.airline} onChange={set("airline")} />
+                <Dropdown id="aircraft" label="Aircraft" options={aircraftOptions} value={form.aircraft} onChange={set("aircraft")} />
+                <TimePicker id="time" label="Time" value={form.time} onChange={set("time")} />
+              </div>
+            </div>
+          )}
 
           {loading && (
             <div className="pass-progress" role="status">
@@ -96,7 +113,7 @@ export default function BoardingPass({ form, setForm, errors, notice, loading, o
 
         <aside className="pass-stub">
           <div>
-            <p className="field-label">Departs</p>
+            <p className="field-label">Departs · Istanbul time</p>
             <p className="stub-big">{form.date ? stubDate(form.date) : "-- ---"}</p>
             <p className="stub-big">{form.time || "--:--"}</p>
           </div>

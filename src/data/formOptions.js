@@ -13,13 +13,3 @@ const aircraftList = [
 
 export const aircraftOptions = aircraftList.map((name) => ({ value: name, label: name }));
 
-export const weatherOptions = [
-  { value: "auto", label: "Auto (forecast)" },
-  { value: "clear", label: "Clear sky" },
-  { value: "cloudy", label: "Cloudy" },
-  { value: "rain", label: "Rain" },
-  { value: "fog", label: "Fog" },
-  { value: "wind", label: "Strong wind" },
-  { value: "snow", label: "Snow" },
-  { value: "storm", label: "Thunderstorm" }
-];

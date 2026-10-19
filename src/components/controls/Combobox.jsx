@@ -3,7 +3,7 @@ import { usePopover, keepInView } from "./usePopover.js";
 import "../../styles/controls.css";
 
 // destination search: the big IATA code is the text input itself
-export default function Combobox({ id, label, items, value, onChange }) {
+export default function Combobox({ id, label, items, value, onChange, locked }) {
   const { open, up, rootRef, show, hide } = usePopover(300);
   const [query, setQuery] = useState(null); // null = not typing
   const [active, setActive] = useState(0);
@@ -52,13 +52,13 @@ export default function Combobox({ id, label, items, value, onChange }) {
     <div className="dest" ref={rootRef}>
       <div className="dest-label-row">
         <label className="field-label" htmlFor={id}>{label}</label>
-        <button type="button" className="dest-change" tabIndex={-1} onMouseDown={(e) => e.preventDefault()} onClick={() => inputRef.current.focus()}>
+        {!locked && <button type="button" className="dest-change" tabIndex={-1} onMouseDown={(e) => e.preventDefault()} onClick={() => inputRef.current.focus()}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <path d="M20 20l-4-4" />
           </svg>
           Change
-        </button>
+        </button>}
       </div>
       <input
         ref={inputRef}
@@ -73,8 +73,10 @@ export default function Combobox({ id, label, items, value, onChange }) {
         aria-describedby={`${id}-hint`}
         autoComplete="off"
         spellCheck="false"
+        readOnly={locked}
         value={query ?? selected.code}
         onFocus={(e) => {
+          if (locked) return;
           e.target.select();
           show();
         }}
@@ -89,7 +91,7 @@ export default function Combobox({ id, label, items, value, onChange }) {
         {selected.city}
         {selected.airport && <span className="dest-airport"> · {selected.airport}</span>}
       </p>
-      <p className="dest-hint" id={`${id}-hint`}>Click the code or type a city to change</p>
+      <p className="dest-hint" id={`${id}-hint`}>{locked ? "Found from your flight number" : "Click the code or type a city to change"}</p>
 
       {open && (
         <ul ref={listRef} id={`${id}-list`} role="listbox" className={`popup popup-list popup-wide ${up ? "is-up" : ""}`} data-lenis-prevent>

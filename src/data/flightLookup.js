@@ -28,10 +28,21 @@ const errorText = {
   429: "Too many flight checks for now. Please try again later."
 };
 
+const cache = new Map();
+
+// same as lookup below, but a flight that was already answered is not asked again
 export async function verifyFlight(number, date) {
+  const key = number + date;
+  if (cache.has(key)) return cache.get(key);
+  const result = await lookup(number, date);
+  if (result.ok || result.final) cache.set(key, result); // don't remember network errors
+  return result;
+}
+
+async function lookup(number, date) {
   if (!KEY) return { ok: false, message: "Flight check isn't set up: VITE_AERODATABOX_KEY is missing from .env.local." };
 
-  const notFound = { ok: false, message: `We couldn't find flight ${number} on ${date}. Check the flight number and the date.` };
+  const notFound = { ok: false, final: true, message: `We couldn't find flight ${number} on ${date}. Check the flight number and the date.` };
   let res;
   try {
     res = await fetch(`https://${HOST}/flights/number/${number}/${date}?dateLocalRole=Departure`, {
@@ -47,7 +58,7 @@ export async function verifyFlight(number, date) {
   if (!flights.length) return notFound;
 
   const fromIST = flights.filter((f) => f.departure?.airport?.iata === "IST");
-  if (!fromIST.length) return { ok: false, message: `Flight ${number} doesn't depart from Istanbul Airport (IST) on ${date}.` };
+  if (!fromIST.length) return { ok: false, final: true, message: `Flight ${number} doesn't depart from Istanbul Airport (IST) on ${date}.` };
 
   const f = fromIST.find((x) => x.codeshareStatus === "IsOperator") || fromIST[0];
   const dest = f.arrival?.airport?.iata || "";

@@ -3,7 +3,7 @@ import { usePopover, keepInView } from "./usePopover.js";
 import "../../styles/controls.css";
 
 // custom <select>: button + listbox, arrow keys / Enter / Esc / type-ahead
-export default function Dropdown({ id, label, options, value, onChange }) {
+export default function Dropdown({ id, label, options, value, onChange, disabled }) {
   const { open, up, rootRef, show, hide } = usePopover(300);
   const [active, setActive] = useState(0);
   const listRef = useRef(null);
@@ -55,6 +55,7 @@ export default function Dropdown({ id, label, options, value, onChange }) {
         type="button"
         id={id}
         className="field-trigger"
+        disabled={disabled}
         role="combobox"
         aria-haspopup="listbox"
         aria-expanded={open}

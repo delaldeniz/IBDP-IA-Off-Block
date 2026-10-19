@@ -4,7 +4,8 @@ import HistoryStub from "../components/HistoryStub.jsx";
 import { loadHistory, saveHistory, MAX_ITEMS } from "../data/history.js";
 import "../styles/history.css";
 
-const departed = (item) => new Date(`${item.flight_date}T${item.time}`) < new Date();
+// times are Istanbul local time (UTC+3)
+const departed = (item) => new Date(`${item.flight_date}T${item.time}:00+03:00`) < new Date();
 
 export default function History() {
   const [items, setItems] = useState(loadHistory);
