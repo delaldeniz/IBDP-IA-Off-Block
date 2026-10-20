@@ -30,7 +30,7 @@ export default function About() {
           <Reveal>
             <h2 className="label">About me</h2>
             <p>
-              Hey there! I'm Delal Deniz, an 18-year-old IBDP student, and I built this website as my Computer Science IA
+              Hey there! I'm an IBDP student, and I built this website as my Computer Science IA
               project. I really hope you find it useful!
             </p>
             <p>
